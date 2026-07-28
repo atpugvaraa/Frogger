@@ -1,8 +1,113 @@
 [gd_scene format=3 uid="uid://dfq2iqhuccltx"]
 
+[ext_resource type="Script" uid="uid://4vxvmd16aeo1" path="res://scenes/game.gd" id="1_lbhrr"]
 [ext_resource type="Texture2D" uid="uid://doghmovcgeltw" path="res://graphics/map.png" id="1_uwrxv"]
+[ext_resource type="PackedScene" uid="uid://dghd7rii024ea" path="res://scenes/player.tscn" id="2_yqjtg"]
+[ext_resource type="Script" uid="uid://bvow1in7idxld" path="res://scenes/player.gd" id="3_lnu2h"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lnu2h"]
+size = Vector2(14, 641)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lbhrr"]
+size = Vector2(384, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iywne"]
+size = Vector2(382, 184)
 
 [node name="Game" type="Node2D" unique_id=992157335]
+script = ExtResource("1_lbhrr")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1176284157]
+[node name="Background" type="Sprite2D" parent="." unique_id=1176284157]
 texture = ExtResource("1_uwrxv")
+metadata/_edit_lock_ = true
+
+[node name="Borders" type="Node2D" parent="." unique_id=445645693]
+metadata/_edit_lock_ = true
+
+[node name="left" type="StaticBody2D" parent="Borders" unique_id=1154718050]
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Borders/left" unique_id=1019494739]
+position = Vector2(-199, 0)
+shape = SubResource("RectangleShape2D_lnu2h")
+
+[node name="right" type="StaticBody2D" parent="Borders" unique_id=1767552287]
+position = Vector2(399, 0)
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Borders/right" unique_id=586729084]
+position = Vector2(-200, 0)
+shape = SubResource("RectangleShape2D_lnu2h")
+
+[node name="top" type="StaticBody2D" parent="Borders" unique_id=422660264]
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Borders/top" unique_id=282864840]
+position = Vector2(0, -330)
+shape = SubResource("RectangleShape2D_lbhrr")
+
+[node name="down" type="StaticBody2D" parent="Borders" unique_id=816462787]
+position = Vector2(-6, 660)
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Borders/down" unique_id=2033393781]
+position = Vector2(6, -330)
+shape = SubResource("RectangleShape2D_lbhrr")
+
+[node name="FinishArea2D" type="Area2D" parent="Borders" unique_id=257089200]
+position = Vector2(-185.13629, -310.50687)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Borders/FinishArea2D" unique_id=242488047]
+position = Vector2(185.13629, 83.50687)
+shape = SubResource("RectangleShape2D_iywne")
+
+[node name="Timer" type="Node" parent="." unique_id=1346869727]
+
+[node name="CarTimer" type="Timer" parent="Timer" unique_id=1331715603]
+autostart = true
+
+[node name="Objects" type="Node2D" parent="." unique_id=872557868]
+y_sort_enabled = true
+
+[node name="Player" parent="Objects" unique_id=632063403 instance=ExtResource("2_yqjtg")]
+script = ExtResource("3_lnu2h")
+
+[node name="CarStartPositions" type="Node2D" parent="." unique_id=743568393]
+metadata/_edit_lock_ = true
+
+[node name="Marker2D" type="Marker2D" parent="CarStartPositions" unique_id=1547347774]
+position = Vector2(200, 164)
+
+[node name="Marker2D2" type="Marker2D" parent="CarStartPositions" unique_id=1795949261]
+position = Vector2(-198, 141)
+
+[node name="Marker2D3" type="Marker2D" parent="CarStartPositions" unique_id=2088885282]
+position = Vector2(199, 114)
+
+[node name="Marker2D4" type="Marker2D" parent="CarStartPositions" unique_id=576832658]
+position = Vector2(-199, 91)
+
+[node name="Marker2D5" type="Marker2D" parent="CarStartPositions" unique_id=1626824235]
+position = Vector2(199, 2)
+
+[node name="Marker2D6" type="Marker2D" parent="CarStartPositions" unique_id=483488866]
+position = Vector2(-199, -25)
+
+[node name="Marker2D7" type="Marker2D" parent="CarStartPositions" unique_id=697834915]
+position = Vector2(-199, -52)
+
+[node name="Marker2D8" type="Marker2D" parent="CarStartPositions" unique_id=1285191723]
+position = Vector2(200, -95)
+
+[node name="Marker2D9" type="Marker2D" parent="CarStartPositions" unique_id=1790950914]
+position = Vector2(199, -118)
+
+[connection signal="body_entered" from="Borders/FinishArea2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_entered" from="Borders/FinishArea2D" to="." method="_on_finish_area_2d_body_entered"]
+[connection signal="timeout" from="Timer/CarTimer" to="." method="_on_car_timer_timeout"]
